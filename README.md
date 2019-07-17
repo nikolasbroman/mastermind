@@ -20,6 +20,6 @@ With these hints, the codebreaker tries to figure out the code with 12 guesses o
 
 ## My version of Mastermind
 
-In my version, you play against a computer. And instead of colors, you pick 4 numbers in the range [1..6]. Otherwise the rules are the same: you have 12 guesses to figure out the code, and after each guess you get the hints described above.
+In my version, you play against a computer. And instead of colors, you pick 4 numbers in the range `[1..6]`. Otherwise the rules are the same: you have 12 guesses to figure out the code, and after each guess you get the hints described above.
 
 You can play as either the codemaker or the codebreaker.
