@@ -34,7 +34,7 @@ class Mastermind
     choose_role
     create_board
     begin_guessing
-    #todo: ask for new game
+    ask_for_new_round
   end
 
   def choose_role
@@ -104,6 +104,24 @@ class Mastermind
   def show_breaker_defeat
     #todo: change message based on whether Human is maker or breaker.
     puts "Unable to break secret code. Game over."
+  end
+
+  def ask_for_new_round
+    print "Play a new round? (y/n): "
+    while input = gets.chomp.downcase
+      if input == "y" || input == "yes"
+        new_round
+        break
+      elsif input == "n" || input == "no"
+        puts
+        puts "Thank you for playing."
+        puts
+        break
+      else
+        puts "Please type yes or no."
+        print "Play a new round? (y/n): "
+      end
+    end
   end
 
 end
