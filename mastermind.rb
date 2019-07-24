@@ -177,7 +177,7 @@ class Human
       if code =~ /^[1-6][1-6][1-6][1-6]$/
         return input
       else
-        puts "Invalid code. Please enter a 4 digits with each digit in the range 1–6."
+        puts "Invalid code. Please enter 4 digits with each digit in the range 1–6."
       end
     end
   end
@@ -187,7 +187,7 @@ class Human
       if guess =~ /^[1-6][1-6][1-6][1-6]$/
         return guess
       else
-        puts "Invalid guess. Please enter a 4 digits with each digit in the range 1–6."
+        puts "Invalid guess. Please enter 4 digits with each digit in the range 1–6."
       end
     end
   end
