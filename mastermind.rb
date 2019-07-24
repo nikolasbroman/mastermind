@@ -172,16 +172,18 @@ end
 
 class Human
 
+  #todo: add text before prompt, e.g. "Enter your secret code: "
   def get_code
     while code = gets.chomp
       if code =~ /^[1-6][1-6][1-6][1-6]$/
-        return input
+        return code
       else
         puts "Invalid code. Please enter 4 digits with each digit in the range 1–6."
       end
     end
   end
 
+  #todo: add text before prompt, e.g. "3rd guess: "
   def get_guess
     while guess = gets.chomp
       if guess =~ /^[1-6][1-6][1-6][1-6]$/
@@ -191,8 +193,6 @@ class Human
       end
     end
   end
-
-  private
 
 end
 
