@@ -172,7 +172,15 @@ end
 
 class Human
 
-  #todo: get code
+  def get_code
+    while code = gets.chomp
+      if code =~ /^[1-6][1-6][1-6][1-6]$/
+        return input
+      else
+        puts "Invalid code. Please enter a 4 digits with each digit in the range 1–6."
+      end
+    end
+  end
 
   def get_guess
     while guess = gets.chomp
@@ -183,6 +191,8 @@ class Human
       end
     end
   end
+
+  private
 
 end
 
