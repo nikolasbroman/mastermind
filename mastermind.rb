@@ -38,7 +38,8 @@ class Mastermind
   end
 
   def choose_role
-    puts "Choose a role:"
+    puts
+    puts "Choose role:"
     puts "1) Code Maker"
     puts "2) Code Breaker"
     while input = gets.chomp.downcase
@@ -59,29 +60,38 @@ class Mastermind
   end
 
   def choose_difficulty
+    puts
     puts "Choose difficulty level:"
     puts "1) Easy"
     puts "2) Normal"
     while input = gets.chomp.downcase
       case input
       when "1", "1) easy", "easy"
-        return "easy"
+        difficulty = "easy"
+        break
       when "2", "2) normal", "normal"
-        return "normal"
+        difficulty = "normal"
+        break
       else
         puts "Sorry, I couldn't understand you. Please try again:"
       end
     end
+    puts
+    difficulty
   end
 
   def create_board
-    @board = Board.new(@maker.get_code)
+    code = @maker.get_code
+    @breaker.secretly_inform(code) if @breaker.is_a?(Computer)
+    @board = Board.new(code)
   end
 
   def begin_guessing
-    12.times do
-      guess = @breaker.get_guess
+    12.times do |i|
+      guess_number = i + 1
+      guess = @breaker.get_guess(guess_number)
       matches = @board.check_matches(guess)
+      @breaker.inform(matches) if @breaker.is_a?(Computer)
       show_correct_matches(matches)
       if matches[0] == 4
         show_breaker_victory
@@ -94,6 +104,7 @@ class Mastermind
   def show_correct_matches(matches)
     puts "#{matches[0]} correct number(s) in the correct position(s)"
     puts "#{matches[1]} correct number(s) in a wrong position"
+    puts
   end
 
   def show_breaker_victory
@@ -184,7 +195,7 @@ class Human
   end
 
   #todo: add text before prompt, e.g. "3rd guess: "
-  def get_guess
+  def get_guess(guess_number)
     while guess = gets.chomp
       if guess =~ /^[1-6][1-6][1-6][1-6]$/
         return guess
@@ -199,15 +210,67 @@ end
 
 class Computer
 
+  def initialize
+    @guesses = []
+    @matches = []
+  end
+
   def set_difficulty(difficulty)
     @difficulty = difficulty
   end
 
   def get_code
-    4.times.map{ rand(1..6) }.join("")
+    random_sequence.join("")
   end
 
-  #todo: get guess (depending on difficulty level)
+  def secretly_inform(code)
+    @code = code
+  end
+
+  def get_guess(guess_number)
+    if guess_number > 1
+      guess = previously_fully_correct(guess_number-1)
+      if @difficulty == "easy"
+        guess = assign_random_digits(guess)
+      elsif @difficulty == "normal"
+        #todo
+      end
+    else
+      guess = random_sequence
+    end
+    @guesses << guess
+    guess = guess.join("")
+    puts guess
+    guess
+  end
+
+  def inform(matches)
+    @matches << matches
+  end
+
+  private
+
+  def random_sequence
+    4.times.map{ rand(1..6) }
+  end
+
+  def previously_fully_correct(i)
+    guess = [nil, nil, nil, nil]
+    if @matches[i-1][0] > 0
+      @guesses[i-1].each_with_index do |digit, index|
+        if digit.to_s == @code[index]
+          guess[index] = digit
+        end
+      end
+    end
+    guess
+  end
+
+  def assign_random_digits(guess)
+    guess.map do |digit|
+      digit ? digit : rand(1..6)
+    end
+  end
 
 end
 
