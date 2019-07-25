@@ -81,9 +81,7 @@ class Mastermind
   end
 
   def create_board
-    code = @maker.get_code
-    @breaker.secretly_inform(code) if @breaker.is_a?(Computer)
-    @board = Board.new(code)
+    @board = Board.new(@maker.get_code)
   end
 
   def begin_guessing
@@ -223,24 +221,18 @@ class Computer
     random_sequence.join("")
   end
 
-  def secretly_inform(code)
-    @code = code
-  end
-
   def get_guess(guess_number)
-    if guess_number > 1
-      guess = previously_fully_correct(guess_number-1)
-      if @difficulty == "easy"
-        guess = assign_random_digits(guess)
-      elsif @difficulty == "normal"
-        #todo
+    if @difficulty == "easy"
+      if guess_number <= 6
+        guess = guess_number.to_s * 4
+      else
+        guess = fully_correct_randomized
       end
-    else
-      guess = random_sequence
+    elsif @difficulty == "normal"
+      #todo
     end
     @guesses << guess
-    guess = guess.join("")
-    puts guess
+    puts guess #todo: add text similar to Human, like "Computer's guess nr. X: "
     guess
   end
 
@@ -254,22 +246,12 @@ class Computer
     4.times.map{ rand(1..6) }
   end
 
-  def previously_fully_correct(i)
-    guess = [nil, nil, nil, nil]
-    if @matches[i-1][0] > 0
-      @guesses[i-1].each_with_index do |digit, index|
-        if digit.to_s == @code[index]
-          guess[index] = digit
-        end
-      end
+  def fully_correct_randomized
+    guess = ""
+    6.times do |n|
+      guess += (n+1).to_s * @matches[n][0]
     end
-    guess
-  end
-
-  def assign_random_digits(guess)
-    guess.map do |digit|
-      digit ? digit : rand(1..6)
-    end
+    guess.split("").shuffle.join("")
   end
 
 end
@@ -277,7 +259,6 @@ end
 
 #if Humans & Computers end up having same methods
 #then create "class Player" that they can inherit from
-
 
 mastermind = Mastermind.new
 mastermind.new_game
