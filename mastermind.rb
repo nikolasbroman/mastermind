@@ -7,11 +7,24 @@ class Mastermind
   end
 
   def new_game
-    #todo: show opening message & credits
+    show_opening_message
     new_round
   end
 
   private
+
+  def show_opening_message
+    puts
+    puts
+    puts "123456123456123456123456123456123456"
+    puts "12345612345              23456123456"
+    puts "1234561234   Mastermind   3456123456"
+    puts "12345612345              23456123456"
+    puts "123456123456123456123456123456123456"
+    puts
+    puts "——— Programmed by Nikolas Broman ———"
+    puts
+  end
 
   def new_round
     choose_role
