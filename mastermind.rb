@@ -28,12 +28,12 @@ class Mastermind
     while input = gets.chomp.downcase
       puts
       case input
-      when "1", "1) code maker" "code maker", "codemaker", "maker"
+      when "1", "1) code maker", "code maker", "codemaker", "maker"
         @maker = Human.new
         @breaker = Computer.new
         @breaker.set_difficulty(choose_difficulty)
         break
-      when "2", "2) code breaker" "code breaker", "codebreaker", "breaker"
+      when "2", "2) code breaker", "code breaker", "codebreaker", "breaker"
         @maker = Computer.new
         @breaker = Human.new
         break
