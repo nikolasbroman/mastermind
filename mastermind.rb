@@ -43,6 +43,7 @@ class Mastermind
     puts "1) Code Maker"
     puts "2) Code Breaker"
     while input = gets.chomp.downcase
+      puts
       case input
       when "1", "1) code maker" "code maker", "codemaker", "maker"
         @maker = Human.new
@@ -60,7 +61,6 @@ class Mastermind
   end
 
   def choose_difficulty
-    puts
     puts "Choose difficulty level:"
     puts "1) Easy"
     puts "2) Normal"
@@ -185,6 +185,7 @@ class Human
   def get_code
     while code = gets.chomp
       if code =~ /^[1-6][1-6][1-6][1-6]$/
+        puts
         return code
       else
         puts "Invalid code. Please enter 4 digits with each digit in the range 1–6."
@@ -211,6 +212,11 @@ class Computer
   def initialize
     @guesses = []
     @matches = []
+    @figuring_out_order = []
+    @figuring_out_now = []
+    @dummy_number
+    @possible_combinations = []
+    @final_guess = [nil, nil, nil, nil]
   end
 
   def set_difficulty(difficulty)
@@ -222,14 +228,18 @@ class Computer
   end
 
   def get_guess(guess_number)
-    if @difficulty == "easy"
-      if guess_number <= 6
-        guess = guess_number.to_s * 4
-      else
-        guess = fully_correct_randomized
-      end
+    if guess_number <= 6
+      guess = guess_number.to_s * 4
+    elsif @difficulty == "easy"
+      guess = randomize_fully_correct_positions
     elsif @difficulty == "normal"
-      #todo
+      if guess_number == 7
+        randomize_figuring_out_order
+        set_dummy_number
+      else
+        check_previous_guess_for_fully_correct_positions
+      end
+      guess = figure_out_fully_correct_positions
     end
     @guesses << guess
     puts guess #todo: add text similar to Human, like "Computer's guess nr. X: "
@@ -246,7 +256,7 @@ class Computer
     4.times.map{ rand(1..6) }
   end
 
-  def fully_correct_randomized
+  def randomize_fully_correct_positions
     guess = ""
     6.times do |n|
       guess += (n+1).to_s * @matches[n][0]
@@ -254,8 +264,69 @@ class Computer
     guess.split("").shuffle.join("")
   end
 
-end
+  def randomize_figuring_out_order 
+    order = randomize_fully_correct_positions.split("")
+    order_with_number_of_occurrences = []
+    digits_checked = []
+    order.each do |digit|
+      unless digits_checked.include?(digit)
+        order_with_number_of_occurrences << [digit, order.count(digit)]
+        digits_checked << digit
+      end
+    end
+    @figuring_out_order = order_with_number_of_occurrences
+  end
 
+  def set_dummy_number
+    6.times do |n|
+      digit = n + 1
+      is_dummy = true
+      @figuring_out_order.each do |array|
+        if array[0] == (digit).to_s
+          is_dummy = false
+        end
+      end
+      if is_dummy
+        @dummy_number = digit
+        break
+      end
+    end
+  end
+
+  def set_possible_combinations
+    digits = @figuring_out_order[0][0] * @figuring_out_order[0][1]
+    dummies = @dummy_number.to_s * (@final_guess.count(nil) - @figuring_out_order[0][1])
+    combination = (digits + dummies).split("")
+    @figuring_out_now = @figuring_out_order.shift
+    @possible_combinations = combination.permutation.to_a.uniq
+  end
+
+  def check_previous_guess_for_fully_correct_positions
+    digit = @figuring_out_now[0]
+    needed_matches = @figuring_out_now[1] + (4 - @final_guess.count(nil))
+    positions = []
+    @guesses[-1].split("").each_with_index do |n, i|
+      if n == digit
+        positions << i
+      end
+    end
+    if @matches[-1][0] == needed_matches
+      positions.each { |p| @final_guess[p] = digit }
+      set_possible_combinations
+    end
+  end
+
+
+  def figure_out_fully_correct_positions
+    set_possible_combinations unless @possible_combinations.count > 0
+    guess = @final_guess.map do |digit|
+      digit == nil ? @possible_combinations[0].shift : digit
+    end
+    @possible_combinations.shift
+    guess.join("")
+  end
+
+end
 
 #if Humans & Computers end up having same methods
 #then create "class Player" that they can inherit from
