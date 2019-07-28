@@ -1,20 +1,3 @@
-=begin
-
-Build these features:
-
-- human player can choose between codemaker / codebreaker
-
-- computer player as Code Maker
---- no need for AI, random is enough
-
-- computer player as Code Breaker
---- easy: guess randomly, keep only fully correct
---- normal: guess randomly, keep fully correct, include half correct
---- hard/impossible: no need
-
-=end
-
-
 class Mastermind
 
   def initialize
@@ -316,7 +299,6 @@ class Computer
     end
   end
 
-
   def figure_out_fully_correct_positions
     set_possible_combinations unless @possible_combinations.count > 0
     guess = @final_guess.map do |digit|
@@ -327,9 +309,6 @@ class Computer
   end
 
 end
-
-#if Humans & Computers end up having same methods
-#then create "class Player" that they can inherit from
 
 mastermind = Mastermind.new
 mastermind.new_game
