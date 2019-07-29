@@ -237,7 +237,7 @@ class Computer
   end
 
   def get_code
-    random_sequence.join("")
+    4.times.map{ rand(1..6) }.join("")
   end
 
   def get_guess(guess_number)
@@ -264,10 +264,6 @@ class Computer
   end
 
   private
-
-  def random_sequence
-    4.times.map{ rand(1..6) }
-  end
 
   def randomize_fully_correct_positions
     guess = ""
