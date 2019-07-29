@@ -44,20 +44,20 @@ class Mastermind
   def choose_role
     puts
     puts "Choose role:"
-    puts "1) Code Maker"
-    puts "2) Code Breaker"
+    puts "1) Code Breaker"
+    puts "2) Code Maker"
     before_prompt
     while input = gets.chomp.downcase
       puts
       case input
-      when "1", "1) code maker", "code maker", "codemaker", "maker"
+      when "1", "1) code breaker", "code breaker", "codebreaker", "breaker"
+        @maker = Computer.new
+        @breaker = Human.new
+        break
+      when "2", "2) code maker", "code maker", "codemaker", "maker"
         @maker = Human.new
         @breaker = Computer.new
         @breaker.set_difficulty(choose_difficulty)
-        break
-      when "2", "2) code breaker", "code breaker", "codebreaker", "breaker"
-        @maker = Computer.new
-        @breaker = Human.new
         break
       else
         puts "Sorry, I couldn't understand you. Please try again."
