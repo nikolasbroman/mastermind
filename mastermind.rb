@@ -266,11 +266,13 @@ class Computer
   private
 
   def randomize_fully_correct_positions
-    guess = ""
-    6.times do |n|
-      guess += (n+1).to_s * @matches[n][0]
+    guess = "1111"
+    while @guesses.include?(guess)
+      guess = ""
+      6.times { |n| guess += (n+1).to_s * @matches[n][0] }
+      guess = guess.split("").shuffle.join("")
     end
-    guess.split("").shuffle.join("")
+    guess
   end
 
   def randomize_figuring_out_order 
