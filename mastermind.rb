@@ -1,3 +1,11 @@
+#todo: add before_prompt to Object class
+
+class Object
+  def before_prompt
+    print "> "
+  end
+end
+
 class Mastermind
 
   def initialize
@@ -38,6 +46,7 @@ class Mastermind
     puts "Choose role:"
     puts "1) Code Maker"
     puts "2) Code Breaker"
+    before_prompt
     while input = gets.chomp.downcase
       puts
       case input
@@ -51,7 +60,8 @@ class Mastermind
         @breaker = Human.new
         break
       else
-        puts "Sorry, I couldn't understand you. Please try again:"
+        puts "Sorry, I couldn't understand you. Please try again."
+        before_prompt
       end
     end
   end
@@ -60,6 +70,7 @@ class Mastermind
     puts "Choose difficulty level:"
     puts "1) Easy"
     puts "2) Normal"
+    before_prompt
     while input = gets.chomp.downcase
       case input
       when "1", "1) easy", "easy"
@@ -69,7 +80,8 @@ class Mastermind
         difficulty = "normal"
         break
       else
-        puts "Sorry, I couldn't understand you. Please try again:"
+        puts "Sorry, I couldn't understand you. Please try again."
+        before_prompt
       end
     end
     puts
@@ -112,7 +124,9 @@ class Mastermind
   end
 
   def ask_for_new_round
-    print "Play a new round? (y/n): "
+    puts
+    puts "Play a new round? (yes/no)"
+    before_prompt
     while input = gets.chomp.downcase
       if input == "y" || input == "yes"
         new_round
@@ -179,12 +193,15 @@ class Human
 
   #todo: add text before prompt, e.g. "Enter your secret code: "
   def get_code
+    puts "Input a 4-digit secret code (with each digit in the range 1–6)."
+    before_prompt
     while code = gets.chomp
       if code =~ /^[1-6][1-6][1-6][1-6]$/
         puts
         return code
       else
         puts "Invalid code. Please enter 4 digits with each digit in the range 1–6."
+        before_prompt
       end
     end
   end
