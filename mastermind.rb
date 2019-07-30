@@ -29,8 +29,28 @@ class Mastermind
     puts "1234561234   Mastermind   3456123456"
     puts "12345612345              23456123456"
     puts "123456123456123456123456123456123456"
+    puts "123 Programmed by Nikolas Broman 456"
     puts
-    puts "——— Programmed by Nikolas Broman ———"
+    puts
+    puts "============ The Rules ============="
+    puts
+    puts "The Code Maker makes a secret code,"
+    puts "picking 4 digits from 1,2,3,4,5,6."
+    puts
+    puts "Examples: 1234, 6543, 5331, 4444..."
+    puts
+    puts "The Code Breaker tries to break the"
+    puts "code in 12 guesses. After each guess"
+    puts "a hint reveals how many digits are:"
+    puts
+    puts "- correct number & correct position"
+    puts "- correct number but wrong position"
+    puts
+    puts "If the code is broken in 12 guesses,"
+    puts "the Code Breaker wins. Otherwise the"
+    puts "Code Maker wins. Have fun!"
+    puts
+    puts "===================================="
     puts
   end
 
