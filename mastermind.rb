@@ -1,5 +1,3 @@
-#todo: add before_prompt to Object class
-
 class Object
   def before_prompt
     print "> "
@@ -110,11 +108,15 @@ class Mastermind
 
   def create_board
     @board = Board.new(@maker.get_code)
+    puts "The Code Maker has made a secret code."
+    puts "Time to show your skills, Code Breaker!"
+    puts
   end
 
   def begin_guessing
     12.times do |i|
       guess_number = i + 1
+      guess_prompt(guess_number)
       guess = @breaker.get_guess(guess_number)
       matches = @board.check_matches(guess)
       @breaker.inform(matches) if @breaker.is_a?(Computer)
@@ -124,23 +126,42 @@ class Mastermind
         return
       end
     end
-    show_breaker_defeat
+    show_maker_victory
+  end
+
+  def guess_prompt(guess_number)
+    case guess_number
+    when 1
+      puts "1st guess:"
+    when 2
+      puts "2nd guess:"
+    when 3
+      puts "3rd guess:"
+    else
+      puts "#{guess_number}th guess:"
+    end
   end
 
   def show_correct_matches(matches)
-    puts "#{matches[0]} correct number(s) in the correct position(s)"
-    puts "#{matches[1]} correct number(s) in a wrong position"
+    puts "= #{matches[0]} correct number(s) in the correct position(s)"
+    puts "= #{matches[1]} correct number(s) in a wrong position"
     puts
   end
 
   def show_breaker_victory
-    #todo: change message based on whether Human is maker or breaker.
-    puts "Secret code is broken! Congratulations!"
+    if @breaker.is_a?(Human)
+      puts "Congratulations! You broke the secret code!"
+    else
+      puts "Game over. The computer broke your code."
+    end
   end
 
-  def show_breaker_defeat
-    #todo: change message based on whether Human is maker or breaker.
-    puts "Unable to break secret code. Game over."
+  def show_maker_victory
+    if @maker.is_a? Human
+      puts "Congratulations! Your code is unbreakable!"
+    else
+      puts "Game over. You couldn't break the secret code."
+    end
   end
 
   def ask_for_new_round
@@ -211,7 +232,6 @@ end
 
 class Human
 
-  #todo: add text before prompt, e.g. "Enter your secret code: "
   def get_code
     puts "Input a 4-digit secret code (with each digit in the range 1–6)."
     before_prompt
@@ -226,13 +246,14 @@ class Human
     end
   end
 
-  #todo: add text before prompt, e.g. "3rd guess: "
   def get_guess(guess_number)
+    before_prompt
     while guess = gets.chomp
       if guess =~ /^[1-6][1-6][1-6][1-6]$/
         return guess
       else
         puts "Invalid guess. Please enter 4 digits with each digit in the range 1–6."
+        before_prompt
       end
     end
   end
@@ -275,7 +296,7 @@ class Computer
       guess = figure_out_fully_correct_positions
     end
     @guesses << guess
-    puts guess #todo: add text similar to Human, like "Computer's guess nr. X: "
+    puts "> #{guess}"
     guess
   end
 
